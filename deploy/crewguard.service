@@ -1,0 +1,26 @@
+[Unit]
+Description=crewguard Discord moderation bot
+# Ollama is a user unit too; ordering is best-effort. The bot degrades gracefully anyway:
+# if the classifier is unreachable it stays up and warns in #mod-log.
+After=network-online.target ollama.service
+Wants=network-online.target
+
+[Service]
+Type=exec
+WorkingDirectory=%h/crewguard
+ExecStart=%h/crewguard/.venv/bin/crewguard run
+Restart=always
+RestartSec=5
+
+# Hardening. The bot needs the network and to write only its own SQLite db, nothing else.
+# Only directives a *user* systemd manager can enforce without privilege — capability/kernel
+# drops (ProtectKernel*, RestrictSUIDSGID) fail with 218/CAPABILITIES in a user unit.
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ReadWritePaths=%h/crewguard
+LockPersonality=true
+RestrictRealtime=true
+
+[Install]
+WantedBy=default.target

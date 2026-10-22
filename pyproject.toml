@@ -1,0 +1,41 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "crewguard"
+version = "0.1.0"
+description = "Discord server provisioning + LLM chat moderation bot for a restaurant crew"
+requires-python = ">=3.12"
+dependencies = [
+    "discord.py>=2.7",
+    "sqlmodel",
+    "click",
+    "python-dotenv",
+    "httpx",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "pytest-asyncio",
+    "ruff",
+]
+
+[project.scripts]
+crewguard = "crewguard.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["crewguard*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+# The default run stays hermetic. The eval needs a live Ollama: `pytest -m eval`.
+addopts = "-m 'not eval'"
+markers = [
+    "eval: hits a live Ollama backend; run with -m eval",
+]
+
+[tool.ruff]
+line-length = 100

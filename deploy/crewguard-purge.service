@@ -1,0 +1,15 @@
+[Unit]
+Description=crewguard data retention purge (delete stored content past RETENTION_DAYS)
+
+[Service]
+Type=oneshot
+WorkingDirectory=%h/crewguard
+ExecStart=%h/crewguard/.venv/bin/crewguard purge
+
+# Same hardening as the bot: only user-enforceable directives (no capability/kernel drops).
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ReadWritePaths=%h/crewguard
+LockPersonality=true
+RestrictRealtime=true
