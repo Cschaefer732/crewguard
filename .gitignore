@@ -34,3 +34,6 @@ CLAUDE.local.md
 
 # Tool caches
 .ruff_cache/
+
+# Obsidian local config (vault markdown is tracked, UI config is not)
+wiki/.obsidian/
